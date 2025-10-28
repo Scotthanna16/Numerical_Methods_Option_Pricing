@@ -16,7 +16,7 @@ class FiniteDifferenceMethod(NumericalMethod):
         self.M = steps  # space steps
         self.N = steps  # time steps
 
-    def run(self, option="call") -> float:
+    def run(self, option: str) -> float:
         option = option.lower()
         # Discretization
         S = np.linspace(0, self.Smax, self.M + 1)
