@@ -1,23 +1,14 @@
-from NumericalMethodBase import NumericalMethod
+from FiniteDifferenceBase import FiniteDifference
 import numpy as np
 
 
-class FiniteDifferenceMethod(NumericalMethod):
-    """
-    Finite Difference solver for the Black–Scholes PDE using Crank–Nicolson.
-    Supports European and American options (call or put).
-    """
+class FiniteDifferenceEuropean(FiniteDifference):
 
-    def __init__(self, S0, K, r, delta, sigma, T, steps=100, Smax=5):
-        super().__init__(S0, r, sigma, T, steps)
-        self.K = K
-        self.delta = delta
-        self.Smax = Smax * S0  # upper boundary
-        self.M = steps  # space steps
-        self.N = steps  # time steps
+    def __init__(self, S0, K, r, delta, sigma, T, option, steps=100, Smax=5):
+        super().__init__(S0, K, r, delta, sigma, T, option, steps, Smax)
 
-    def run(self, option: str) -> float:
-        option = option.lower()
+    def getprice(self) -> float:
+        option = self.option.lower()
         # Discretization
         S = np.linspace(0, self.Smax, self.M + 1)
         dS = S[1] - S[0]
@@ -74,18 +65,30 @@ class FiniteDifferenceMethod(NumericalMethod):
 
         # Interpolate to find V(S0)
         price = np.interp(self.S0, S, V)
-        return [price]
+        return price
 
 
-if __name__ == "__main__":
-    fd_eur = FiniteDifferenceMethod(
-        S0=100,
-        K=110,
-        r=0.07,
-        delta=0.02,
-        sigma=0.2,
-        T=1,
-        steps=200,
-    )
+# if __name__ == "__main__":
+#     fd_call = FiniteDifferenceEuropean(
+#         S0=100,
+#         K=110,
+#         r=0.07,
+#         delta=0.02,
+#         sigma=0.2,
+#         T=1,
+#         option="call",
+#         steps=200,
+#     )
+#     fd_put = FiniteDifferenceEuropean(
+#         S0=100,
+#         K=110,
+#         r=0.07,
+#         delta=0.02,
+#         sigma=0.2,
+#         T=1,
+#         option="put",
+#         steps=200,
+#     )
 
-    print("European Call:", fd_eur.run(option="call"))
+#     print("European Call:", fd_call.getprice())
+#     print("European Put:", fd_put.getprice())

@@ -7,7 +7,7 @@ class EulerMaruyamaMethod(NumericalMethod):
     def __init__(self, S0, r, sigma, T, steps):
         super().__init__(S0, r=r, sigma=sigma, T=T, steps=steps)
 
-    def run(self) -> float:
+    def getprice(self) -> float:
 
         t = np.arange(0, self.T, self.h)
         prices = [self.S0] + [None] * (len(t) - 1)
@@ -27,5 +27,5 @@ class EulerMaruyamaMethod(NumericalMethod):
 # if __name__ == "__main__":
 #     random.seed(42)
 #     m = EulerMaruyamaMethod(100, 0.02, 0.05, 1, 252)
-#     prices = m.run()
+#     prices = m.getprice()
 #     print(prices)
