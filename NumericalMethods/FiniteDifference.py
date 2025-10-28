@@ -8,25 +8,25 @@ class FiniteDifferenceMethod(NumericalMethod):
     Supports European and American options (call or put).
     """
 
-    def __init__(self, S0, K, r, delta, sigma, T, steps=100, Smax=5, option="call"):
+    def __init__(self, S0, K, r, delta, sigma, T, steps=100, Smax=5):
         super().__init__(S0, r, sigma, T, steps)
         self.K = K
         self.delta = delta
-        self.option = option.lower()
         self.Smax = Smax * S0  # upper boundary
         self.M = steps  # space steps
         self.N = steps  # time steps
 
-    def run(self) -> float:
+    def run(self, option="call") -> float:
+        option = option.lower()
         # Discretization
         S = np.linspace(0, self.Smax, self.M + 1)
         dS = S[1] - S[0]
         dt = self.T / self.N
 
         # Payoff at maturity
-        if "call" in self.option:
+        if "call" in option:
             V = np.maximum(S - self.K, 0)
-        elif "put" in self.option:
+        elif "put" in option:
             V = np.maximum(self.K - S, 0)
         else:
             raise ValueError("Option type must be 'call' or 'put'")
@@ -60,7 +60,7 @@ class FiniteDifferenceMethod(NumericalMethod):
             rhs = B @ V[1:-1]
 
             # Boundary conditions
-            if "call" in self.option:
+            if "call" in option:
                 rhs[0] += a[0] * (0)  # V(0,t) = 0 for call
                 rhs[-1] += c[-1] * (
                     self.Smax - self.K * np.exp(-self.r * (self.T - n * dt))
@@ -77,16 +77,15 @@ class FiniteDifferenceMethod(NumericalMethod):
         return [price]
 
 
-# if __name__ == "__main__":
-#     fd_eur = FiniteDifferenceMethod(
-#         S0=100,
-#         K=110,
-#         r=0.07,
-#         delta=0.02,
-#         sigma=0.2,
-#         T=1,
-#         steps=200,
-#         option="call",
-#     )
+if __name__ == "__main__":
+    fd_eur = FiniteDifferenceMethod(
+        S0=100,
+        K=110,
+        r=0.07,
+        delta=0.02,
+        sigma=0.2,
+        T=1,
+        steps=200,
+    )
 
-#     print("European Call:", fd_eur.run())
+    print("European Call:", fd_eur.run(option="call"))
