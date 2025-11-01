@@ -1,2 +1,4 @@
-# Numerical_Methods_Option_Pricing
+# Numerical Methods For Option Pricing
 This repository contains the data, code, and final paper for my undergraduate math project. It is a study on different numerical methods for option pricing. I start by going through the math behind option pricing, topics discussed include Wiener Processes, Stochastic Differential Equations, and the Black-Scholes Equation. Then I move on to discuss numerical methods including the Euler-Maruyama Method, Binomial Option Pricing Model, and Monte Carlo Simulation. Each of the methods is followed by an example. For EMM we simulate the price of the S&P500. Using the BOPM, I compare the price of premiums for European and American style call options on the S&P500. Finally, I use the Monte Carlo method to explain Asian style options. 
+
+Later, this project turned into myself creating a python package for numerical methods in option pricing. I've the Finite Difference method, and have been working on implementing support for more exotic options.
